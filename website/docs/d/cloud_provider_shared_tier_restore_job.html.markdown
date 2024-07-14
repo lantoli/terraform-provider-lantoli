@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Backup"
 page_title: "MongoDB Atlas: mongodbatlas_shared_tier_restore_job"
 sidebar_current: "docs-mongodbatlas-datasource-mongodbatlas-shared-tier-restore-jobs"
 description: |-

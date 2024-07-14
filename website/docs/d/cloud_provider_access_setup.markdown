@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Backup"
 page_title: "MongoDB Atlas: mongodbatlas_cloud_provider_access_setup"
 sidebar_current: "docs-mongodbatlas-datasource-cloud-provider-access-setup"
 description: |-

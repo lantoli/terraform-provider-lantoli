@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Federation"
 page_title: "MongoDB Atlas: mongodbatlas_federated_settings_role_mappings"
 sidebar_current: "docs-mongodbatlas-datasource-federated-settings-role-mappings"
 description: |-

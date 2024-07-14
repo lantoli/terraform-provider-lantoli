@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "User and Security"
 page_title: "MongoDB Atlas: custom_dns_configuration_cluster_aws"
 sidebar_current: "docs-mongodbatlas-resource-custom_dns_configuration_cluster_aws"
 description: |-

@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Cluster"
 page_title: "MongoDB Atlas: advanced_cluster"
 sidebar_current: "docs-mongodbatlas-datasource-advanced-cluster"
 description: |-

@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "User and Security"
 page_title: "MongoDB Atlas: mongodbatlas_control_plane_ip_addresses"
 sidebar_current: "docs-mongodbatlas-datasource-control-plane-ip-addresses"
 description: |-

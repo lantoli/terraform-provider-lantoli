@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Backup"
 page_title: "MongoDB Atlas: cloud_provider_snapshot_restore_jobs"
 sidebar_current: "docs-mongodbatlas-datasource-cloud_provider_snapshot_restore_jobs"
 description: |-

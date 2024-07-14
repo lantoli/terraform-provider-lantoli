@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Backup"
 page_title: "MongoDB Atlas: mongodbatlas_shared_tier_snapshots"
 sidebar_current: "docs-mongodbatlas-datasource-cloud_provider_shared_tier_snapshots"
 description: |-

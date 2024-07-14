@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Cluster"
 page_title: "MongoDB Atlas: cluster"
 sidebar_current: "docs-mongodbatlas-datasource-clusters"
 description: |-

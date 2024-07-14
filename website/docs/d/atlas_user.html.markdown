@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "User and Security"
 page_title: "MongoDB Atlas: atlas_user"
 sidebar_current: "docs-mongodbatlas-datasource-atlas-user"
 description: |-

@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Outage Simulation"
 page_title: "MongoDB Atlas: cluster_outage_simulation"
 sidebar_current: "docs-mongodbatlas-resource-federated-database-instance"
 description: |-

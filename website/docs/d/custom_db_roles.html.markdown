@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "User and Security"
 page_title: "MongoDB Atlas: custom_db_roles"
 sidebar_current: "docs-mongodbatlas-datasource-custom-db-roles"
 description: |-

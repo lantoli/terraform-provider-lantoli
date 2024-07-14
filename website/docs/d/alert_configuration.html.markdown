@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Alert Configuration"
 page_title: "MongoDB Atlas: alert_configuration"
 sidebar_current: "docs-mongodbatlas-datasource-alert-configuration"
 description: |-

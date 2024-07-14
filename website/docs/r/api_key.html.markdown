@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "User and Security"
 page_title: "MongoDB Atlas: api_key"
 sidebar_current: "docs-mongodbatlas-resource-api-key"
 description: |-

@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Auditing"
 page_title: "MongoDB Atlas: auditing"
 sidebar_current: "docs-mongodbatlas-datasource-auditing"
 description: |-

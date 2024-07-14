@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Backup"
 page_title: "MongoDB Atlas: backup_compliance_policy"
 sidebar_current: "docs-mongodbatlas-resource-backup-compliance-policy"
 description: |-

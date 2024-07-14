@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Backup"
 page_title: "MongoDB Atlas: cloud_provider_snapshot_backup_policy"
 sidebar_current: "docs-mongodbatlas-datasource-cloud-provider-snapshot-backup-policy"
 description: |-

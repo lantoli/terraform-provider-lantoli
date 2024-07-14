@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Federation"
 page_title: "MongoDB Atlas: federated_database_query_limit"
 sidebar_current: "docs-mongodbatlas-resource-federated-query-limits"
 description: |-

@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Backup"
 page_title: "MongoDB Atlas: cloud_backup_snapshot_export_bucket"
 sidebar_current: "docs-mongodbatlas-resource-cloud_backup_snapshot_export_bucket"
 description: |-
