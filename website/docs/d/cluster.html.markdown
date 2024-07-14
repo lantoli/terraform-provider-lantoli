@@ -2,6 +2,7 @@
 layout: "mongodbatlas"
 page_title: "MongoDB Atlas: cluster"
 sidebar_current: "docs-mongodbatlas-datasource-cluster"
+subcategory: "Deprecated"
 description: |-
     Describe a Cluster.
 ---

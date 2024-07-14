@@ -1,5 +1,6 @@
 ---
 layout: "mongodbatlas"
+subcategory: "Deprecated"
 page_title: "MongoDB Atlas: cluster"
 sidebar_current: "docs-mongodbatlas-resource-cluster"
 description: |-
