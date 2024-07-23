@@ -12,7 +12,7 @@ Key differences in the configuration:
 2. Provider Settings: Moved from the top level to the replication spec allowing you to create multi-cloud clusters.
 3. Auto Scaling: Moved from the top level to the replication spec allowing you to scale replication specs individually.
 4. Backup Configuration: Renamed from `cloud_backup` to `backup_enabled`.
-5. See also ["Migration to new sharding schema and leveraging Independent Shard Scaling"](/guides/advanced-cluster-new-sharding-schema#migration-sharded)
+5. See also ["Migration to new sharding schema and leveraging Independent Shard Scaling"](advanced-cluster-new-sharding-schema#migration-sharded)
 
 ### Example 1: Old Configuration (`mongodbatlas_cluster`)
 
