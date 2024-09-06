@@ -1,26 +1,28 @@
 ---
-page_title: "Migration - Advanced Cluster New Sharding Schema"
+page_title: "Migration Guide: Advanced Cluster New Sharding Schema"
 ---
 
-# Migration - Advanced Cluster New Sharding Schema
+# Migration Guide: Advanced Cluster New Sharding Schema
 
-**Objective**: Guide users to migrate their existing advanced_cluster configurations to use the new sharding schema which was introduced in version `1.18.0`. Additionally, a section is included to describe how Independent Shard Scaling can be used once the new sharding schema is adopted. Exiting sharding configurations will continue to work but will have deprecation messages if not using the new sharding schema.
+**Objective**: Use this guide to migrate your existing `advanced_cluster` configurations to the new sharding schema introduced in version 1.18.0. The new sharding schema allows you to scale shards independently. Existing sharding configurations continue to work, although the software issues deprecation messages if you use the legacy schema.
 
-- [Overview of schema changes](#overview)
-- [Migrating existing advanced_cluster type SHARDED](#migration-sharded)
-- [Migrating existing advanced_cluster type GEOSHARDED](#migration-geosharded)
-- [Migrating existing advanced_cluster type REPLICASET](#migration-replicaset)
-- [Leveraging Independent Shard Scaling](#leveraging-iss)
+- [Migration Guide: Advanced Cluster New Sharding Schema](#migration-guide-advanced-cluster-new-sharding-schema)
+  - [Overview of schema changes](#overview-of-schema-changes)
+    - [Migrate advanced\_cluster type `SHARDED`](#migrate-advanced_cluster-type-sharded)
+    - [Migrate advanced\_cluster type `GEOSHARDED`](#migrate-advanced_cluster-type-geosharded)
+    - [Migrate advanced\_cluster type `REPLICASET`](#migrate-advanced_cluster-type-replicaset)
+    - [Use Independent Shard Scaling](#use-independent-shard-scaling)
 
 <a id="overview"></a>
-# Overview of schema changes
+## Overview of schema changes
 
-`replication_specs` attribute has been modified to now be able to represent each individual shard of a cluster with a unique replication spec element. As such, when using the new sharding schema the existing attribute `num_shards` will no longer be defined, and instead the number of shards will be defined by the number of `replication_specs` elements.
+`replication_specs` attribute now represents each individual cluster's shard with a unique replication spec element.
+When you use the new sharding schema, the schema no longer uses the existing attribute `num_shards`, and instead the number of shards are defined by the number of `replication_specs` elements.
 
 <a id="migration-sharded"></a>
-## Migrating existing advanced_cluster type SHARDED
+### Migrate advanced_cluster type `SHARDED`
 
-Considering the following configuration of a SHARDED cluster using the deprecated `num_shards`:
+Consider the following configuration of a `SHARDED` cluster using the deprecated `num_shards`:
 ```
 resource "mongodbatlas_advanced_cluster" "test" {
   project_id   = var.project_id
@@ -80,12 +82,12 @@ resource "mongodbatlas_advanced_cluster" "test" {
 }
 ```
 
-This updated configuration will trigger a terraform update plan. However, the underlying cluster will not face any changes after the apply, as both configurations represent a sharded cluster composed of 2 shards.
+This updated configuration will trigger a Terraform update plan. However, the underlying cluster will not face any changes after the `apply` command, as both configurations represent a sharded cluster composed of two shards.
 
 <a id="migration-geosharded"></a>
-## Migrating existing advanced_cluster type GEOSHARDED
+### Migrate advanced_cluster type `GEOSHARDED`
 
-Considering the following configuration of a GEOSHARDED cluster using the deprecated `num_shards`:
+Consider the following configuration of a `GEOSHARDED` cluster using the deprecated `num_shards`:
 
 ```
 resource "mongodbatlas_advanced_cluster" "test" {
@@ -124,7 +126,7 @@ resource "mongodbatlas_advanced_cluster" "test" {
 }
 ```
 
-In order to update our configuration to the new schema, we will remove the use of `num_shards` and add a new identical `replication_specs` element for each shard. Note that these 2 changes must be done at the same time.
+In order to update our configuration to the new schema, we will remove the use of `num_shards` and add a new identical `replication_specs` element for each shard. Note that these two changes must be done at the same time.
 
 ```
 resource "mongodbatlas_advanced_cluster" "test" {
@@ -188,14 +190,14 @@ resource "mongodbatlas_advanced_cluster" "test" {
 
 
 
-This updated configuration will trigger a terraform update plan. However, the underlying cluster will not face any changes after the apply, as both configurations represent a geo sharded cluster with 2 zones and 2 shards in each one.
+This updated configuration triggers a Terraform update plan. However, the underlying cluster will not face any changes after the `apply` command, as both configurations represent a geo sharded cluster with two zones and two shards in each one.
 
 <a id="migration-replicaset"></a>
-## Migrating existing advanced_cluster type REPLICASET
+### Migrate advanced_cluster type `REPLICASET`
 
--> **NOTE:**  Please consider the following complementary documentation providing details on transitioning from a replicaset to a sharded cluster: https://www.mongodb.com/docs/atlas/scale-cluster/#convert-a-replica-set-to-a-sharded-cluster.
+To learn more, see the documentation on [transitioning from a replicaset to a sharded cluster](https://www.mongodb.com/docs/atlas/scale-cluster/#convert-a-replica-set-to-a-sharded-cluster).
 
-Considering the following replica set configuration:
+Consider the following replica set configuration:
 ```
 resource "mongodbatlas_advanced_cluster" "test" {
     project_id   = var.project_id
@@ -272,10 +274,10 @@ resource "mongodbatlas_advanced_cluster" "test" {
 }
 ```
 
-<a id="leveraging-iss"></a>
-## Leveraging Independent Shard Scaling 
+<a id="use-iss"></a>
+### Use Independent Shard Scaling 
 
-The new sharding schema must be used. Each shard must be represented with a unique replication_specs element and `num_shards` must not be used, as illustrated in the following example.
+Use the new sharding schema. Each shard must be represented with a unique replication_specs element and `num_shards` must not be used, as illustrated in the following example.
 
 ```
 resource "mongodbatlas_advanced_cluster" "test" {
@@ -344,3 +346,5 @@ resource "mongodbatlas_advanced_cluster" "test" {
   }
 }
 ```
+
+-> **NOTE:** For any cluster leveraging the new schema and defining independently scaled shards, users should also update corresponding `mongodbatlas_cloud_backup_schedule` resource & data sources. This involves updating any existing Terraform configurations of the resource to use `copy_settings.#.zone_id` instead of `copy_settings.#.replication_spec_id`. This is needed as `mongodbatlas_advanced_cluster` resource and data source will no longer have `replication_specs.#.id` present when shards are scaled independently. To learn more, review the [1.18.0 Migration Guide](1.18.0-upgrade-guide.md#transition-cloud-backup-schedules-for-clusters-to-use-zones).
