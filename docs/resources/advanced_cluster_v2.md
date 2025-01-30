@@ -1,8 +1,11 @@
-# Resource: mongodbatlas_advanced_cluster (schema v1)
+# Resource: mongodbatlas_advanced_cluster (schema v2)
 
 `mongodbatlas_advanced_cluster` provides an Advanced Cluster resource. The resource lets you create, edit and delete advanced clusters. The resource requires your Project ID.
 
-This is the schema v1 documentation for `mongodbatlas_advanced_cluster`.
+This is the schema v2 documentation for `mongodbatlas_advanced_cluster`. v2 is available by setting the environment variable `MONGODB_ATLAS_ADVANCED_CLUSTER_V2_SCHEMA=true`.
+
+Please refer to the corresponding documentation of the resource depending on the schema version you are using.
+
 
 More information on considerations for using advanced clusters please see [Considerations](https://docs.atlas.mongodb.com/reference/api/cluster-advanced/create-one-cluster-advanced/#considerations)
 

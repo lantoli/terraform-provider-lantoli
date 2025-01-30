@@ -1,8 +1,6 @@
-# Resource: mongodbatlas_advanced_cluster (schema v1)
+# Resource: mongodbatlas_advanced_cluster
 
 `mongodbatlas_advanced_cluster` provides an Advanced Cluster resource. The resource lets you create, edit and delete advanced clusters. The resource requires your Project ID.
-
-This is the schema v1 documentation for `mongodbatlas_advanced_cluster`.
 
 More information on considerations for using advanced clusters please see [Considerations](https://docs.atlas.mongodb.com/reference/api/cluster-advanced/create-one-cluster-advanced/#considerations)
 
@@ -459,7 +457,7 @@ Include **desired options** within advanced_configuration:
 * `transaction_lifetime_limit_seconds` - (Optional) Lifetime, in seconds, of multi-document transactions. Defaults to 60 seconds.
 
 
-### Tags
+### Tags (schema v1)
 
  ```terraform
  tags {
@@ -476,6 +474,19 @@ Key-value pairs between 1 to 255 characters in length for tagging and categorizi
 
 * `key` - (Required) Constant that defines the set of the tag.
 * `value` - (Required) Variable that belongs to the set of the tag.
+
+To learn more, see [Resource Tags](https://dochub.mongodb.org/core/add-cluster-tag-atlas).
+
+### Tags (schema v2)
+
+ ```terraform
+ tags {
+  "Key 1" = "Value 1"
+  "Key 2" = "Value 2"
+  }
+```
+
+Map of key-value pairs between 1 to 255 characters in length for tagging and categorizing the cluster.
 
 To learn more, see [Resource Tags](https://dochub.mongodb.org/core/add-cluster-tag-atlas).
 
