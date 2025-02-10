@@ -8,6 +8,8 @@
 
 ~> **IMPORTANT:** There are fields that are immutable after creation, i.e if `date_field` value does not exist in the collection, the online archive state will be pending forever, and this field cannot be updated, that means a destroy is required, known error `ONLINE_ARCHIVE_CANNOT_MODIFY_FIELD`
 
+~> **IMPORTANT:** Support for Online Archive on `GCP` is available in Private Preview. To request access and participate in the Private Preview release of this feature, complete the [sign-up form](https://www.mongodb.com/products/platform/atlas-online-archive#promo).
+
 ## Example Usages
 ```terraform
 resource "mongodbatlas_online_archive" "test" {
@@ -113,6 +115,7 @@ resource "mongodbatlas_online_archive" "test" {
 * `schedule` - Regular frequency and duration when archiving process occurs. See [schedule](#schedule).
 * `partition_fields` - (Recommended) Fields to use to partition data. You can specify up to two frequently queried fields (or up to three fields when one of them is `date_field`) to use for partitioning data. Queries that don’t contain the specified fields require a full collection scan of all archived documents, which takes longer and increases your costs. To learn more about how partition improves query performance, see [Data Structure in S3](https://docs.mongodb.com/datalake/admin/optimize-query-performance/#data-structure-in-s3). The value of a partition field can be up to a maximum of 700 characters. Documents with values exceeding 700 characters are not archived. See [partition fields](#partition).
 * `paused` - (Optional) State of the online archive. This is required for pausing an active online archive or resuming a paused online archive. If the collection has another active online archive, the resume request fails.
+* `sync_creation` - (Optional) Flag that indicates whether the provider will wait for the state of the online archive to reach `IDLE` or `ACTIVE` when creating an online archive. Defaults to `false`.
 
 ### Criteria
 
@@ -138,7 +141,7 @@ The only field required for criteria type `CUSTOM`
 * `expire_after_days` - Number of days used in the date criteria for nominating documents for deletion. Value must be between 7 and 9215.
 
 ### Data Process Region
-* `cloud_provider` - Human-readable label that identifies the Cloud service provider where you wish to store your archived data. `AZURE` may be selected only if Azure is the Cloud service provider for the cluster and no AWS online archive has been created for the cluster.
+* `cloud_provider` - Human-readable label that identifies the Cloud service provider where you wish to store your archived data. `AZURE` may be selected only if Azure is the Cloud service provider for the cluster and no AWS online archive has been created for the cluster. 
 * `region` - Human-readable label that identifies the geographic location of the region where you wish to store your archived data. For allowed values, see [MongoDB Atlas API documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Online-Archive/operation/createOnlineArchive)
 
 ### Schedule

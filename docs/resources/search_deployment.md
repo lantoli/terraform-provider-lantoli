@@ -59,7 +59,7 @@ output "mongodbatlas_search_deployment_id" {
 ### Required
 
 - `cluster_name` (String) Label that identifies the cluster to return the search nodes for.
-- `project_id` (String) Unique 24-hexadecimal character string that identifies the project.
+- `project_id` (String) Unique 24-hexadecimal digit string that identifies your project.
 - `specs` (Attributes List) List of settings that configure the search nodes for your cluster. This list is currently limited to defining a single element. (see [below for nested schema](#nestedatt--specs))
 
 ### Optional
@@ -89,7 +89,7 @@ Optional:
 - `delete` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs.
 - `update` (String) A string that can be [parsed as a duration](https://pkg.go.dev/time#ParseDuration) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours).
 
-# Import 
+## Import 
 Search node resource can be imported using the project ID and cluster name, in the format `PROJECT_ID-CLUSTER_NAME`, e.g.
 
 ```

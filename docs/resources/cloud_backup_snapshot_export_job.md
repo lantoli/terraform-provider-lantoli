@@ -49,7 +49,7 @@ resource "mongodbatlas_cloud_backup_schedule" "backup" {
   auto_export_enabled = true
   export {
     export_bucket_id = mongodbatlas_cloud_backup_snapshot_export_bucket.export.export_bucket_id
-    frequency_type = "daily"
+    frequency_type = "weekly"
   }
   use_org_and_group_names_in_export_prefix = true
 
@@ -101,8 +101,7 @@ In addition to all arguments above, the following attributes are exported:
 
 * `components` - _Returned for sharded clusters only._ Export job details for each replica set in the sharded cluster.
 * `created_at` - Timestamp in ISO 8601 date and time format in UTC when the export job was created.
-* `err_msg` - Error message, only if the export job failed. **Note:** This attribute is deprecated as it is not being used.
-* `export_status` - _Returned for replica set only._ Status of the export job.
+* `export_status` - Status of the export job.
 * `finished_at` - Timestamp in ISO 8601 date and time format in UTC when the export job completes.
 * `export_job_id` - Unique identifier of the export job.
 * `prefix ` - Full path on the cloud provider bucket to the folder where the snapshot is exported. The path is in the following format:`/exported_snapshots/{ORG-NAME}/{PROJECT-NAME}/{CLUSTER-NAME}/{SNAPSHOT-INITIATION-DATE}/{TIMESTAMP}`
@@ -111,6 +110,7 @@ In addition to all arguments above, the following attributes are exported:
     * `InProgress` - indicates that the snapshot is being exported
     * `Successful` - indicates that the export job has completed successfully
     * `Failed` - indicates that the export job has failed
+    * `Cancelled` - indicates that the export job has cancelled
 
 ### components
 * `export_id` - _Returned for sharded clusters only._ Export job details for each replica set in the sharded cluster.

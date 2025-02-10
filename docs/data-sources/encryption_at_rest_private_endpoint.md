@@ -2,7 +2,12 @@
 
 `mongodbatlas_encryption_at_rest_private_endpoint` describes a private endpoint used for encryption at rest using customer-managed keys.
 
+~> **IMPORTANT** The Encryption at Rest using Azure Key Vault over Private Endpoints feature is available by request. To request this functionality for your Atlas deployments, contact your Account Manager. 
+To learn more about existing limitations, see [Manage Customer Keys with Azure Key Vault Over Private Endpoints](https://www.mongodb.com/docs/atlas/security/azure-kms-over-private-endpoint/#manage-customer-keys-with-azure-key-vault-over-private-endpoints).
+
 ## Example Usages
+
+-> **NOTE:** Only Azure Key Vault with Azure Private Link is supported at this time.
 
 ```terraform
 data "mongodbatlas_encryption_at_rest_private_endpoint" "single" {
@@ -21,7 +26,7 @@ output "endpoint_connection_name" {
 
 ### Required
 
-- `cloud_provider` (String) Label that identifies the cloud provider of the private endpoint.
+- `cloud_provider` (String) Label that identifies the cloud provider for the Encryption At Rest private endpoint.
 - `id` (String) Unique 24-hexadecimal digit string that identifies the Private Endpoint Service.
 - `project_id` (String) Unique 24-hexadecimal digit string that identifies your project.
 

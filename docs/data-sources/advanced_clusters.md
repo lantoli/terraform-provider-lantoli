@@ -2,6 +2,8 @@
 
 `mongodbatlas_advanced_clusters` describes all Advanced Clusters by the provided project_id. The data source requires your Project ID.
 
+This doc is for schema v1 of `mongodbatlas_advanced_clusters`, doc for schema v2 can be found [here](./advanced_clusters%2520%2528schema%2520v2%2529).
+
 -> **NOTE:** Groups and projects are synonymous terms. You may find group_id in the official documentation.
 
 ~> **IMPORTANT:**
@@ -19,7 +21,7 @@ resource "mongodbatlas_advanced_cluster" "example" {
   replication_specs {
     region_configs {
       electable_specs {
-        instance_size = "M5"
+        instance_size = "M0"
       }
       provider_name         = "TENANT"
       backing_provider_name = "AWS"
@@ -33,6 +35,8 @@ data "mongodbatlas_advanced_clusters" "example" {
   project_id = mongodbatlas_advanced_cluster.example.project_id
 }
 ```
+
+**NOTE:** There can only be one M0 cluster per project.
 
 ## Example using latest sharding configurations with independent shard scaling in the cluster
 
@@ -98,6 +102,7 @@ In addition to all arguments above, the following attributes are exported:
 * `tags` - Set that contains key-value pairs between 1 to 255 characters in length for tagging and categorizing the cluster. See [below](#tags).
 * `labels` - Set that contains key-value pairs between 1 to 255 characters in length for tagging and categorizing the cluster. See [below](#labels).
 * `mongo_db_major_version` - Version of the cluster to deploy.
+* `pinned_fcv` - The pinned Feature Compatibility Version (FCV) with its associated expiration date. See [below](#pinned_fcv).
 * `pit_enabled` - Flag that indicates if the cluster uses Continuous Cloud Backup.
 * `replication_specs` - List of settings that configure your cluster regions. If `use_replication_spec_per_shard = true`, this array has one object per shard representing node configurations in each shard. For replica sets there is only one object representing node configurations. See [below](#replication_specs)
 * `root_cert_type` - Certificate Authority that MongoDB Atlas clusters use.
@@ -105,6 +110,10 @@ In addition to all arguments above, the following attributes are exported:
 * `version_release_system` - Release cadence that Atlas uses for this cluster.
 * `advanced_configuration` - Get the advanced configuration options. See [Advanced Configuration](#advanced-configuration) below for more details.
 * `global_cluster_self_managed_sharding` - Flag that indicates if cluster uses Atlas-Managed Sharding (false) or Self-Managed Sharding (true).
+* `replica_set_scaling_strategy` - (Optional) Replica set scaling mode for your cluster.
+* `redact_client_log_data` - (Optional) Flag that enables or disables log redaction, see the [manual](https://www.mongodb.com/docs/manual/administration/monitoring/#log-redaction) for more info.
+* `config_server_management_mode` - Config Server Management Mode for creating or updating a sharded cluster. Valid values are `ATLAS_MANAGED` (default) and `FIXED_TO_DEDICATED`. When configured as `ATLAS_MANAGED`, Atlas may automatically switch the cluster's config server type for optimal performance and savings. When configured as `FIXED_TO_DEDICATED`, the cluster will always use a dedicated config server. To learn more, see the [Sharded Cluster Config Servers documentation](https://dochub.mongodb.org/docs/manual/core/sharded-cluster-config-servers/).
+* `config_server_type` Describes a sharded cluster's config server type. Valid values are `DEDICATED` and `EMBEDDED`. To learn more, see the [Sharded Cluster Config Servers documentation](https://dochub.mongodb.org/docs/manual/core/sharded-cluster-config-servers/).
 
 ### bi_connector_config
 
@@ -124,8 +133,6 @@ To learn more, see [Resource Tags](https://dochub.mongodb.org/core/add-cluster-t
 
 ### labels
 
-**WARNING:** This property is deprecated and will be removed in the future, use the `tags` attribute instead.
-
 Key-value pairs that categorize the cluster. Each key and value has a maximum length of 255 characters.  You cannot set the key `Infrastructure Tool`, it is used for internal purposes to track aggregate usage.
 
 * `key` - The key that you want to write.
@@ -136,6 +143,8 @@ Key-value pairs that categorize the cluster. Each key and value has a maximum le
 
 ### replication_specs
 
+* `id` - **(DEPRECATED)** Unique identifer of the replication document for a zone in a Global Cluster. This value corresponds to the legacy sharding schema (no independent shard scaling) and is different from the Shard ID you may see in the Atlas UI. This value is not populated (empty string) when a sharded cluster has independently scaled shards.
+* `external_id` - Unique 24-hexadecimal digit string that identifies the replication object for a shard in a Cluster. This value corresponds to Shard ID displayed in the UI. When using old sharding configuration (replication spec with `num_shards` greater than 1) this value is not populated.
 * `num_shards` - Provide this value if you set a `cluster_type` of SHARDED or GEOSHARDED. **(DEPRECATED.)** To learn more, see the [Migration Guide](../guides/1.18.0-upgrade-guide.html.markdown) for more details.
 * `region_configs` - Configuration for the hardware specifications for nodes set for a given regionEach `region_configs` object describes the region's priority in elections and the number and type of MongoDB nodes that Atlas deploys to the region. Each `region_configs` object must have either an `analytics_specs` object, `electable_specs` object, or `read_only_specs` object. See [below](#region_configs)
 *  `container_id` - A key-value map of the Network Peering Container ID(s) for the configuration specified in `region_configs`. The Container ID is the id of the container either created programmatically by the user before any clusters existed in a project or when the first cluster in the region (AWS/Azure) or project (GCP) was created.  The syntax is `"providerName:regionName" = "containerId"`. Example `AWS:US_EAST_1" = "61e0797dde08fb498ca11a71`.
@@ -198,6 +207,16 @@ Key-value pairs that categorize the cluster. Each key and value has a maximum le
 * `oplog_min_retention_hours` - Minimum retention window for cluster's oplog expressed in hours. A value of null indicates that the cluster uses the default minimum oplog window that MongoDB Cloud calculates.
 * `sample_size_bi_connector` - Number of documents per database to sample when gathering schema information. Defaults to 100. Available only for Atlas deployments in which BI Connector for Atlas is enabled.
 * `sample_refresh_interval_bi_connector` - Interval in seconds at which the mongosqld process re-samples data to create its relational schema. The default value is 300. The specified value must be a positive integer. Available only for Atlas deployments in which BI Connector for Atlas is enabled.
+* `default_max_time_ms` - Default time limit in milliseconds for individual read operations to complete. This option corresponds to the [defaultMaxTimeMS(https://www.mongodb.com/docs/upcoming/reference/cluster-parameters/defaultMaxTimeMS/) cluster parameter. This parameter is supported only for MongoDB version 8.0 and above.
+* `transaction_lifetime_limit_seconds` - (Optional) Lifetime, in seconds, of multi-document transactions. Defaults to 60 seconds.
+* `change_stream_options_pre_and_post_images_expire_after_seconds` - (Optional) The minimum pre- and post-image retention time in seconds. This parameter is only supported for MongoDB version 6.0 and above. Defaults to `-1`(off).
+* `tls_cipher_config_mode` - The TLS cipher suite configuration mode. Valid values include `CUSTOM` or `DEFAULT`. The `DEFAULT` mode uses the default cipher suites. The `CUSTOM` mode allows you to specify custom cipher suites for both TLS 1.2 and TLS 1.3. 
+* `custom_openssl_cipher_config_tls12` - The custom OpenSSL cipher suite list for TLS 1.2. This field is only valid when `tls_cipher_config_mode` is set to `CUSTOM`.
+
+### pinned_fcv
+
+* `expiration_date` - Expiration date of the fixed FCV. This value is in the ISO 8601 timestamp format (e.g. "2024-12-04T16:25:00Z").
+* `version` - Feature compatibility version of the cluster.
 
 
 ## Attributes Reference
