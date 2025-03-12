@@ -772,7 +772,9 @@ See detailed information for arguments and attributes: [MongoDB API Advanced Clu
 
 ## Considerations and Best Practices
 
-- If you want to remove or disable some cluster functionality, it is recommended to set the attributes explicitly to their default value instead of removing them. This will ensure that the configuration definition fully represents your cluster. For example, if you have a `read_only_specs` block in your cluster definition like this one:
+### Remove or disable functionality
+
+To disable or remove functionalities, we recommended to explicitly set those attributes to their intended value instead of removing them from the configuration. This will ensure no ambiguity in what the final terraform resource state will be. For example, if you have a `read_only_specs` block in your cluster definition like this one:
 ```terraform
 ...
 region_configs {
