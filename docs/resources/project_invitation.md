@@ -1,6 +1,12 @@
+---
+subcategory: "Deprecated"    
+---
+
 # Resource: mongodbatlas_project_invitation
 
 `mongodbatlas_project_invitation` invites a user to join an Atlas project.
+
+~> **DEPRECATION:** This resource is deprecated. Migrate to `mongodbatlas_cloud_user_project_assignment` for managing project membership. See the [Project Invitation to Cloud User Project Assignment Migration Guide](../guides/project-invitation-to-cloud-user-project-assignment-migration-guide).
 
 Each invitation for an Atlas user includes roles that Atlas grants the user when they accept the invitation.
 

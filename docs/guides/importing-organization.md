@@ -25,21 +25,15 @@ With import support, you can now:
 
 ## Important Changes to Required Attributes
 
-To enable import functionality, several attributes that were previously required for creating organizations have been made optional:
+To enable import functionality, several attributes that were previously marked as required have been made optional:
 
 - `org_owner_id`
 - `description` 
 - `role_names`
-- `federation_settings_id` (was already optional but it's also creation-only)
 
-### Why These Changes Were Necessary
+This change was done because these attributes are only needed when creating a new organization and are not returned by the Atlas API when reading existing organizations so they will be empty if the resource is imported.
 
-These attributes are **creation-only** attributes that:
-1. Are only needed when creating a new organization.
-2. Cannot be modified after the organization is created.
-3. Are not returned by the Atlas API when reading existing organizations.
-
-**Important:** While these attributes are now optional in the schema, they are still **required when creating a new organization**. The provider will validate that these attributes are present during the creation process.
+While these attributes are now optional in the schema, they are still **required when creating a new organization**. The provider will validate that these attributes are present during the creation process.
 
 ## How to Import an Organization
 
@@ -48,7 +42,6 @@ These attributes are **creation-only** attributes that:
 Before importing an organization, ensure you have:
 - MongoDB Atlas API credentials with Organization Owner permissions.
 - The Organization ID of the organization you want to import.
-- Terraform version 0.15 or later.
 - MongoDB Atlas Provider version 1.38.0 or later.
 
 ### Finding Your Organization ID
@@ -63,17 +56,23 @@ You can find your organization ID in several ways:
 
 #### Step 1: Create the Terraform Configuration
 
-Create a Terraform configuration file that describes the organization you want to import. **Do not include** the creation-only attributes:
+Create a Terraform configuration file that describes the organization you want to import and the `import block`. **Do not include** the creation-only attributes:
 
 ```hcl
 resource "mongodbatlas_organization" "imported" {
   name = "My Existing Organization"
 }
+
+import {
+  id = "<ORG_ID>"
+  to = mongodbatlas_organization.imported
+}
+
 ```
 
 #### Step 2: Run the Import Command
 
-Execute the import command with your organization ID:
+Alternatively, you can use the `import command` instead of the `import block`:
 
 ```bash
 terraform import mongodbatlas_organization.imported <ORG_ID>
@@ -111,16 +110,16 @@ resource "mongodbatlas_organization" "imported" {
 
 ## Important Considerations
 
-### API Credentials
+### API Credentials Usage  
 
-When importing an organization:
-- The provider will use the API credentials configured in the provider block.
-- Unlike creating a new organization (which generates new API keys), importing uses your existing credentials.
-- Ensure your API key has Organization Owner permissions for the organization being imported.
+- When importing an organization, the provider API credentials are used. Ensure that your API key has Organization Owner permissions for the organization being imported.
+- When creating an organization, the process remains unchanged: new API keys are generated as part of the resource creation, and these keys will be used for subsequent `mongodbatlas_organization` resource operations.
+
+**Important**: API credentials stored in the `mongodbatlas_organization` Terraform state will take precedence, regardless of their validity.
 
 ### Creation-Only Attributes
 
-Remember that the following attributes **cannot be specified** when importing:
+The newly-declared optional attributes **cannot be specified** when importing:
 - `org_owner_id` - The organization owner is already set.
 - `description` - API key description from organization creation.
 - `role_names` - API key roles from organization creation.
@@ -143,12 +142,12 @@ For a complete example of importing an organization, including all configuration
 
 ### Common Issues
 
-1. **"Required attribute" errors during import**: Ensure you haven't included creation-only attributes in your configuration
-2. **Permission errors**: Verify your API key has Organization Owner role
+1. **"cannot be changed after creation" errors during import**: Ensure you haven't included creation-only attributes in your configuration
+2. **Permission errors**: Verify your provider API key has Organization Owner role
 3. **Resource not found**: Double-check the organization ID is correct
 
 ## See Also
 
 - [mongodbatlas_organization Resource Documentation](../resources/organization)
-- [MongoDB Atlas Organization API Documentation](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Organizations)
 - [Example: Creating a New Organization](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/master/examples/mongodbatlas_organization) 
+- [MongoDB Atlas Admin API Organization](https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2/group/endpoint-organizations).
