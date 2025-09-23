@@ -822,22 +822,45 @@ More information about moving resources can be found in our [Migration Guide](ht
 
 ### "known after apply" verbosity
 
-When modifying cluster configurations, you may see `(known after apply)` markers in your Terraform plan output, even for attributes you haven't modified. This is expected behavior.
-
-▸Understanding the Behavior
+When modifying cluster configurations, you may see `(known after apply)` markers in your Terraform plan output, even for attributes you haven't modified. This is expected behavior, for example:
+```
+# mongodbatlas_advanced_cluster.this will be updated in-place
+! resource "mongodbatlas_advanced_cluster" "this" {
+!       connection_strings                   = {
++           private          = (known after apply)
+!           private_endpoint = [
+-               {
+-                   connection_string                     = "<REDACTED>" -> null
+-                   endpoints                             = [
+-                       {
+-                           endpoint_id   = "<REDACTED>" -> null
+-                           provider_name = "AWS" -> null
+-                           region        = "EU_EAST_1" -> null
+                        },
+                    ] -> null
+                    # (1 unchanged attribute hidden)
+                },
+            ] -> (known after apply)
++          
+...
+!                       electable_specs        = {
+!                           disk_iops       = 3000 -> (known after apply)
+!                           disk_size_gb    = 60 -> (known after apply)
+!                           ebs_volume_type = "STANDARD" -> (known after apply)
+                            # (2 unchanged attributes hidden)
+                        }
+...
+    }
+```
 
 The provider v2.x uses the Terraform [Plugin Framework (TPF)](https://developer.hashicorp.com/terraform/plugin/framework), which is more strict and verbose with computed values than the legacy [SDKv2 framework](https://developer.hashicorp.com/terraform/plugin/sdkv2) used in v1.x. Key points:
 
-- "(known after apply)" doesn't mean the value will change - It indicates a computed value that can't be known in advance, even if the value remains the same.
+- "(known after apply)" doesn't mean the value will change - It indicates a computed value that [can't be known in advance](https://developer.hashicorp.com/terraform/language/expressions/references#values-not-yet-known), even if the value remains the same.
 - Optional/Computed attributes show as "known after apply" when not explicitly set, but won't actually change.
-- Actual changes are marked with an arrow (`->`) in the plan - These values will truly change.
+- All attributes which are marked as "known after apply", including their nested attributes, can be safely ignored.
 - Dependent attributes may change - Some changes can affect related attributes (e.g., change to `zone_name` may update `zone_id`, `region_name` may update `container_id`, `instance_size` may update `disk_iops`, or `provider_name` may update `ebs_volume_type`).
 
-▸Mitigating Plan Verbosity
-
-To reduce the number of `(known after apply)` entries in your plan output:
-
-1. Explicitly declare known values in your configuration where possible:
+To reduce the number of `(known after apply)` entries in your plan output, explicitly declare known values in your configuration where possible:
    ```terraform
    replication_specs = [
      {
@@ -846,9 +869,9 @@ To reduce the number of `(known after apply)` entries in your plan output:
            electable_specs = {
              instance_size   = "M30"
              node_count      = 3
-             disk_size_gb    = 100  # Explicitly set even if it's the default
+             disk_size_gb    = 100  # Explicitly set if known
              disk_iops       = 3000 # Explicitly set if known
-             ebs_volume_type = "STANDARD" # Explicitly set the volume type
+             ebs_volume_type = "STANDARD" # Explicitly set even if it's the default
            }
            # ... other configuration
          }
@@ -857,27 +880,7 @@ To reduce the number of `(known after apply)` entries in your plan output:
    ]
    ```
 
-2. Use lifecycle ignore_changes for attributes that frequently show as unknown but don't affect your infrastructure, for example:
-   ```terraform
-   lifecycle {
-     ignore_changes = [
-       state_name,
-       replication_specs[0].container_id,
-       replication_specs[0].external_id,
-       replication_specs[0].zone_id
-     ]
-   }
-   ```
-
-3. Review the plan carefully to distinguish between:
-   - Actual changes: Attributes you're intentionally modifying.
-   - Computed updates: Attributes marked as `(known after apply)` that will be recalculated but won't cause operational changes.
-
-▸Important Notes
-
-- `(known after apply)` markers don't represent actual changes—only values with an arrow (`->`) will change, along with any dependent attributes affected by those changes.
-- Plans with `(known after apply)` entries are safe to apply.
-- The MongoDB team is working to reduce plan verbosity, though no timeline is available yet.
+The MongoDB team is working to reduce plan verbosity, though no timeline is available yet.
 
 ### Remove or disable functionality
 
