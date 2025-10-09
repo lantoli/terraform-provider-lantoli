@@ -12,10 +12,9 @@ See [CHANGELOG](https://github.com/mongodb/terraform-provider-mongodbatlas/blob/
 ```terraform
 # Configure the MongoDB Atlas Provider 
 provider "mongodbatlas" {
-  public_key = var.mongodbatlas_public_key
-  private_key  = var.mongodbatlas_private_key
+client_id = var.mongodbatlas_client_id
+client_secret = var.mongodbatlas_client_secret
 }
-# Create the resources
 ```
 
 ### Provider and terraform version constraints
@@ -50,28 +49,26 @@ Also see [`Atlas for Government Considerations`](https://www.mongodb.com/docs/at
 The MongoDB Atlas provider offers a flexible means of providing credentials for authentication.
 You can use any the following methods:
 
-### Environment Variables
+### Service Accounts
 
-You can also provide your credentials via the environment variables, 
-`MONGODB_ATLAS_PUBLIC_API_KEY` and `MONGODB_ATLAS_PRIVATE_API_KEY`,
-for your public and private MongoDB Atlas programmatic API key pair respectively:
+Service Accounts (SA) is the preferred authentication method for the MongoDB Atlas provider.
+The [MongoDB Atlas documentation](https://www.mongodb.com/docs/atlas/configure-api-access/#grant-programmatic-access-to-an-organization) contains the most up-to-date instructions for creating your organization's SA and granting the required access.
 
-```terraform
-provider "mongodbatlas" {}
-```
+The SA-supported credential hierarchy is the following: 
 
-Usage (prefix the export commands with a space to avoid the keys being recorded in OS history):
+| Criteria (in order) | Source |
+|---|---|
+| 1. AWSAssumeRoleARN is set in provider | AWS Secrets Manager (getting AWS credentials from provider) |
+| 2. AWSAssumeRoleARN is set in environment variable | AWS Secrets Manager (getting AWS credentials from environment variables) |
+| 3. Any of AccessToken, ClientID, ClientSecret, PublicKey, PrivateKey in provider are set | Provider |
+| 4. Any of AccessToken, ClientID, ClientSecret, PublicKey, PrivateKey in environment variables are set | Environment variables |
+| 5. Else | No authentication |
 
-```shell
-$  export MONGODB_ATLAS_PUBLIC_API_KEY="<ATLAS_PUBLIC_KEY>"
-$  export MONGODB_ATLAS_PRIVATE_API_KEY="<ATLAS_PRIVATE_KEY>"
-$ terraform plan
-```
-
-We recommend that you use the `MONGODB_ATLAS_PUBLIC_API_KEY` and `MONGODB_ATLAS_PRIVATE_API_KEY` environment variables because they are compatible with other MongoDB tools, such as Atlas CLI.
-You can still use `MONGODB_ATLAS_PUBLIC_KEY` and `MONGODB_ATLAS_PRIVATE_KEY` as alternative keys in your local environment. However, these environment variables are not guaranteed to work across all tools in the MongoDB ecosystem.
+See [Migration Guide: Service Accounts Authentication](guides/migrate-to-service-accounts) for more
+details on setting up SA authentication.
 
 ### AWS Secrets Manager
+
 AWS Secrets Manager (AWS SM) helps to manage, retrieve, and rotate database credentials, API keys, and other secrets throughout their lifecycles. See [product page](https://aws.amazon.com/secrets-manager/) and [documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html) for more details.
 
 In order to enable the Terraform MongoDB Atlas Provider with AWS SM, please follow the below steps: 
@@ -144,7 +141,28 @@ Note: Fully qualified `secret_name` ARN as input is REQUIRED for cross-AWS accou
 
 Note: `sts_endpoint` parameter is REQUIRED for cross-AWS region or cross-AWS account secrets. 
 
-7. In terminal, `terraform init` 
+7. In terminal, `terraform init`
+
+### Environment Variables
+
+You can also provide your credentials via the environment variables, 
+`MONGODB_ATLAS_PUBLIC_API_KEY` and `MONGODB_ATLAS_PRIVATE_API_KEY`,
+for your public and private MongoDB Atlas programmatic API key pair respectively:
+
+```terraform
+provider "mongodbatlas" {}
+```
+
+Usage (prefix the export commands with a space to avoid the keys being recorded in OS history):
+
+```shell
+$  export MONGODB_ATLAS_PUBLIC_API_KEY="<ATLAS_PUBLIC_KEY>"
+$  export MONGODB_ATLAS_PRIVATE_API_KEY="<ATLAS_PRIVATE_KEY>"
+$ terraform plan
+```
+
+We recommend that you use the `MONGODB_ATLAS_PUBLIC_API_KEY` and `MONGODB_ATLAS_PRIVATE_API_KEY` environment variables because they are compatible with other MongoDB tools, such as Atlas CLI.
+You can still use `MONGODB_ATLAS_PUBLIC_KEY` and `MONGODB_ATLAS_PRIVATE_KEY` as alternative keys in your local environment. However, these environment variables are not guaranteed to work across all tools in the MongoDB ecosystem.
 
 ### Static Credentials
 
@@ -296,7 +314,7 @@ We ship binaries but do not prioritize fixes for the following operating system 
 ## Examples from MongoDB and the Community
 
 <!-- NOTE: the below examples link is updated during the release process, when doing changes in the following sentence verify scripts/update-examples-reference-in-docs.sh is not impacted-->
-We have [example configurations](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.0.0/examples)
+We have [example configurations](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.0.1/examples)
 in our GitHub repo that will help both beginner and more advanced users.
 
 Have a good example you've created and want to share?
