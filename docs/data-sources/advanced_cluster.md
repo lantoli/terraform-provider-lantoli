@@ -102,7 +102,7 @@ resource "mongodbatlas_advanced_cluster" "example-flex" {
   project_id   = "<YOUR-PROJECT-ID>"
   name         = "flex-cluster"
   cluster_type = "REPLICASET"
-  
+
   replication_specs = [
     {
       region_configs = [
@@ -123,10 +123,62 @@ data "mongodbatlas_advanced_cluster" "example" {
 }
 ```
 
+## Example using effective fields with auto-scaling
+
+```terraform
+resource "mongodbatlas_advanced_cluster" "auto_scale" {
+  project_id            = "<YOUR-PROJECT-ID>"
+  name                  = "auto-scale-cluster"
+  cluster_type          = "REPLICASET"
+  use_effective_fields  = true
+
+  replication_specs = [
+    {
+      region_configs = [
+        {
+          electable_specs = {
+            instance_size = "M10"
+            node_count    = 3
+          }
+          auto_scaling = {
+            compute_enabled            = true
+            compute_scale_down_enabled = true
+            compute_min_instance_size  = "M10"
+            compute_max_instance_size  = "M30"
+          }
+          provider_name = "AWS"
+          priority      = 7
+          region_name   = "US_EAST_1"
+        }
+      ]
+    }
+  ]
+}
+
+# Read effective values after Atlas auto-scales the cluster
+data "mongodbatlas_advanced_cluster" "auto_scale" {
+  project_id           = mongodbatlas_advanced_cluster.auto_scale.project_id
+  name                 = mongodbatlas_advanced_cluster.auto_scale.name
+  use_effective_fields = true
+  depends_on           = [mongodbatlas_advanced_cluster.auto_scale]
+}
+
+output "configured_instance_size" {
+  value = data.mongodbatlas_advanced_cluster.auto_scale.replication_specs[0].region_configs[0].electable_specs.instance_size
+}
+
+output "actual_instance_size" {
+  value = data.mongodbatlas_advanced_cluster.auto_scale.replication_specs[0].region_configs[0].effective_electable_specs.instance_size
+}
+```
+
+**For module authors:** See the [Effective Fields Module Example](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/master/examples/mongodbatlas_advanced_cluster/effective-fields-module) for a complete example of using `use_effective_fields` and effective specs in reusable Terraform modules.
+
 ## Argument Reference
 
 * `project_id` - (Required) The unique ID for the project to create the cluster.
 * `name` - (Required) Name of the cluster as it appears in Atlas. Once the cluster is created, its name cannot be changed.
+* `use_effective_fields` - (Optional) Controls how hardware specification fields are returned in the response. When set to true, returns the original client-specified values and provides separate effective fields showing current operational values. When false (default), hardware specification fields show current operational values directly. Primarily used for autoscaling compatibility. **Note:** Effective specs (`effective_electable_specs`, `effective_analytics_specs`, `effective_read_only_specs`) are always returned independently of the flag value. See the resource documentation for [Auto-Scaling with Effective Fields](../resources/advanced_cluster.md#auto-scaling-with-effective-fields) for more details.
 
 ## Attributes Reference
 
@@ -193,7 +245,10 @@ Key-value pairs that categorize the cluster. Each key and value has a maximum le
 * `analytics_auto_scaling` - Configuration for the Collection of settings that configures analytics-auto-scaling information for the cluster. See [below](#analytics_auto_scaling).
 * `backing_provider_name` - Cloud service provider on which you provision the host for a multi-tenant cluster.
 * `electable_specs` - Hardware specifications for electable nodes in the region.
-* `priority` -  Election priority of the region. 
+* `effective_electable_specs` - Effective hardware specifications for electable nodes in the region, reflecting actual Atlas-managed values including auto-scaling changes. See [below](#specs).
+* `effective_analytics_specs` - Effective hardware specifications for analytics nodes in the region, reflecting actual Atlas-managed values including auto-scaling changes. See [below](#specs).
+* `effective_read_only_specs` - Effective hardware specifications for read-only nodes in the region, reflecting actual Atlas-managed values including auto-scaling changes. See [below](#specs).
+* `priority` -  Election priority of the region.
 * `provider_name` - Cloud service provider on which the servers are provisioned.
 * `read_only_specs` - Hardware specifications for read-only nodes in the region. See [below](#specs).
 * `region_name` - Physical location of your MongoDB cluster.

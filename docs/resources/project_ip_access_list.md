@@ -12,6 +12,8 @@ subcategory: "Projects"
 When you remove an entry from the access list, existing connections from the removed address(es) may remain open for a variable amount of time. How much time passes before Atlas closes the connection depends on several factors, including how the connection was established, the particular behavior of the application or driver using the address, and the connection protocol (e.g., TCP or UDP). This is particularly important to consider when changing an existing IP address or CIDR block as they cannot be updated via the Provider (comments can however), hence a change will force the destruction and recreation of entries.   
 
 
+~> **IMPORTANT:** During creation this resource does not validate whether the specified `ip_address`, `cidr_block`, or `aws_security_group` already exists in the project's access list (known limitation). Defining a duplicate entry will result in a successful resource creation associated to the existing entry.
+
 ## Example Usage
 
 ### Using CIDR Block
@@ -64,7 +66,7 @@ resource "mongodbatlas_project_ip_access_list" "test" {
 
 
 ### Further Examples
-- [Project IP Access List](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.0.1/examples/mongodbatlas_project_ip_access_list)
+- [Project IP Access List](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.2.0/examples/mongodbatlas_project_ip_access_list)
 
 
 ## Argument Reference
