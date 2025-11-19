@@ -20,7 +20,7 @@ subcategory: "Clusters"
 ## Example Usage
 
 ```terraform
-resource "mongodbatlas_advanced_cluster" "example" {
+resource "mongodbatlas_advanced_cluster" "this" {
   project_id   = "<YOUR-PROJECT-ID>"
   name         = "cluster-test"
   cluster_type = "REPLICASET"
@@ -42,91 +42,16 @@ resource "mongodbatlas_advanced_cluster" "example" {
   ]
 }
 
-data "mongodbatlas_advanced_cluster" "example" {
-	project_id = mongodbatlas_advanced_cluster.example.project_id
-	name 	   = mongodbatlas_advanced_cluster.example.name
-}
-```
-
-## Example using latest sharding configurations with independent shard scaling in the cluster
-
-```terraform
-resource "mongodbatlas_advanced_cluster" "example" {
-  project_id     = "<YOUR-PROJECT-ID>"
-  name           = "cluster-test"
-  backup_enabled = false
-  cluster_type   = "SHARDED"
-
-  replication_specs = [
-    {    # Sharded cluster with 2 asymmetric shards (M30 and M40)
-      region_configs = [
-        {
-          electable_specs = {
-            instance_size = "M30"
-            disk_iops     = 3000
-            node_count    = 3
-          }
-          provider_name = "AWS"
-          priority      = 7
-          region_name   = "EU_WEST_1"
-        }
-      ]
-    }, 
-    {
-      region_configs = [
-        {
-          electable_specs = {
-            instance_size = "M40"
-            disk_iops     = 3000
-            node_count    = 3
-          }
-          provider_name = "AWS"
-          priority      = 7
-          region_name   = "EU_WEST_1"
-        }
-      ]
-    }
-  ]
-}
-
-data "mongodbatlas_advanced_cluster" "example" {
-  project_id                     = mongodbatlas_advanced_cluster.example.project_id
-  name                           = mongodbatlas_advanced_cluster.example.name
-}
-```
-
-## Example using Flex cluster
-
-```terraform
-resource "mongodbatlas_advanced_cluster" "example-flex" {
-  project_id   = "<YOUR-PROJECT-ID>"
-  name         = "flex-cluster"
-  cluster_type = "REPLICASET"
-
-  replication_specs = [
-    {
-      region_configs = [
-        {
-          provider_name = "FLEX"
-          backing_provider_name = "AWS"
-          region_name = "US_EAST_1"
-          priority = 7
-        }
-      ]
-    }
-  ]
-}
-
-data "mongodbatlas_advanced_cluster" "example" {
-  project_id = mongodbatlas_advanced_cluster.example-flex.project_id
-  name       = mongodbatlas_advanced_cluster.example-flex.name
+data "mongodbatlas_advanced_cluster" "this" {
+	project_id = mongodbatlas_advanced_cluster.this.project_id
+	name 	   = mongodbatlas_advanced_cluster.this.name
 }
 ```
 
 ## Example using effective fields with auto-scaling
 
 ```terraform
-resource "mongodbatlas_advanced_cluster" "auto_scale" {
+resource "mongodbatlas_advanced_cluster" "this" {
   project_id            = "<YOUR-PROJECT-ID>"
   name                  = "auto-scale-cluster"
   cluster_type          = "REPLICASET"
@@ -156,23 +81,96 @@ resource "mongodbatlas_advanced_cluster" "auto_scale" {
 }
 
 # Read effective values after Atlas auto-scales the cluster
-data "mongodbatlas_advanced_cluster" "auto_scale" {
-  project_id           = mongodbatlas_advanced_cluster.auto_scale.project_id
-  name                 = mongodbatlas_advanced_cluster.auto_scale.name
+data "mongodbatlas_advanced_cluster" "this" {
+  project_id           = mongodbatlas_advanced_cluster.this.project_id
+  name                 = mongodbatlas_advanced_cluster.this.name
   use_effective_fields = true
-  depends_on           = [mongodbatlas_advanced_cluster.auto_scale]
+  depends_on           = [mongodbatlas_advanced_cluster.this]
 }
 
 output "configured_instance_size" {
-  value = data.mongodbatlas_advanced_cluster.auto_scale.replication_specs[0].region_configs[0].electable_specs.instance_size
+  value = data.mongodbatlas_advanced_cluster.this.replication_specs[0].region_configs[0].electable_specs.instance_size
 }
 
 output "actual_instance_size" {
-  value = data.mongodbatlas_advanced_cluster.auto_scale.replication_specs[0].region_configs[0].effective_electable_specs.instance_size
+  value = data.mongodbatlas_advanced_cluster.this.replication_specs[0].region_configs[0].effective_electable_specs.instance_size
 }
 ```
 
-**For module authors:** See the [Effective Fields Module Example](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/master/examples/mongodbatlas_advanced_cluster/effective-fields-module) for a complete example of using `use_effective_fields` and effective specs in reusable Terraform modules.
+## Example using latest sharding configurations with independent shard scaling in the cluster
+
+```terraform
+resource "mongodbatlas_advanced_cluster" "this" {
+  project_id     = "<YOUR-PROJECT-ID>"
+  name           = "cluster-test"
+  backup_enabled = false
+  cluster_type   = "SHARDED"
+
+  replication_specs = [
+    {    # Sharded cluster with 2 asymmetric shards (M30 and M40)
+      region_configs = [
+        {
+          electable_specs = {
+            instance_size = "M30"
+            disk_iops     = 3000
+            node_count    = 3
+          }
+          provider_name = "AWS"
+          priority      = 7
+          region_name   = "EU_WEST_1"
+        }
+      ]
+    },
+    {
+      region_configs = [
+        {
+          electable_specs = {
+            instance_size = "M40"
+            disk_iops     = 3000
+            node_count    = 3
+          }
+          provider_name = "AWS"
+          priority      = 7
+          region_name   = "EU_WEST_1"
+        }
+      ]
+    }
+  ]
+}
+
+data "mongodbatlas_advanced_cluster" "this" {
+  project_id                     = mongodbatlas_advanced_cluster.this.project_id
+  name                           = mongodbatlas_advanced_cluster.this.name
+}
+```
+
+## Example using Flex cluster
+
+```terraform
+resource "mongodbatlas_advanced_cluster" "this" {
+  project_id   = "<YOUR-PROJECT-ID>"
+  name         = "flex-cluster"
+  cluster_type = "REPLICASET"
+
+  replication_specs = [
+    {
+      region_configs = [
+        {
+          provider_name = "FLEX"
+          backing_provider_name = "AWS"
+          region_name = "US_EAST_1"
+          priority = 7
+        }
+      ]
+    }
+  ]
+}
+
+data "mongodbatlas_advanced_cluster" "this" {
+  project_id = mongodbatlas_advanced_cluster.this.project_id
+  name       = mongodbatlas_advanced_cluster.this.name
+}
+```
 
 ## Argument Reference
 
