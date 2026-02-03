@@ -27,10 +27,10 @@ The port-mapped architecture addresses these limitations by using one service at
 
 **Key attribute changes:**
 
-- `mongodbatlas_privatelink_endpoint.port_mapping_enabled`: Set to `true` (legacy defaults to `false`)
-- `mongodbatlas_privatelink_endpoint_service.endpoint_service_id`: Forwarding rule name (legacy uses arbitrary endpoint group name)
-- `mongodbatlas_privatelink_endpoint_service.private_endpoint_ip_address`: Required (not used in legacy)
-- `mongodbatlas_privatelink_endpoint_service.endpoints`: Not used (required in legacy)
+- `mongodbatlas_privatelink_endpoint.port_mapping_enabled`: Set to `true` (legacy defaults to `false`).
+- `mongodbatlas_privatelink_endpoint_service.endpoint_service_id`: Forwarding rule name (legacy: endpoint group name).
+- `mongodbatlas_privatelink_endpoint_service.private_endpoint_ip_address`: Required (not used in legacy).
+- `mongodbatlas_privatelink_endpoint_service.endpoints`: Not used (required in legacy).
 
 ## Best Practices Before Migrating
 
@@ -145,13 +145,13 @@ resource "mongodbatlas_privatelink_endpoint_service" "port_mapped" {
 
 **Apply and test:**
 
-1. Run `terraform plan` — verify new port-mapped resources will be created and legacy resources remain unchanged.
+1. Run `terraform plan` to verify new port-mapped resources will be created and legacy resources remain unchanged.
 
 2. Run `terraform apply` to create the port-mapped resources.
 
 3. **Update your application connection strings.** This is when downtime occurs. Retrieve the new connection string from your cluster's private endpoint configuration.
 
-   -> **Note:** Connection string format changes from `pl-0` (e.g., `cluster0-pl-0.a0b1c2.domain.com`) to `psc-0` (e.g., `cluster0-psc-0.a0b1c2.domain.com`). Exception: Cross-cloud clusters spanning a region with port-mapped endpoints continue using `pl-0`.
+   -> **Note:** Connection string format changes from `pl-0` (e.g., `cluster0-pl-0.a0b1c2.domain.com`) to `psc-0` (e.g., `cluster0-psc-0.a0b1c2.domain.com`). For single-region and multi-region clusters, the connection string uses `psc-0`. **Exception:** Cross-cloud clusters spanning a region with a port-mapped endpoint continue using `pl-0`. Make sure to update all application connection strings accordingly.
 
 4. Test application connectivity with the port-mapped endpoint.
 
