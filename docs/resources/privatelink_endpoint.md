@@ -8,7 +8,7 @@ subcategory: "Private Endpoint Services"
 
 ~> **IMPORTANT:** This resource creates a Private Endpoint *Service* in MongoDB Atlas. The endpoint itself is created in your cloud provider using the information returned by this resource. The complementary resource `mongodbatlas_privatelink_endpoint_service` is used to link your cloud provider's endpoint to the Atlas service.
 
-The [private link Terraform module](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/private-endpoint/mongodbatlas/latest) makes use of this resource and simplifies its use.
+The [private link Terraform module](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/private-endpoint/mongodbatlas/lathis) makes use of this resource and simplifies its use.
 
 -> **NOTE:** You must have Organization Owner or Project Owner role. A network container is created for a private endpoint if one does not yet exist in the project. Before configuring a private endpoint for a new region, review the [Multi-Region Private Endpoints](https://www.mongodb.com/docs/atlas/troubleshoot-private-endpoints/#multi-region-private-endpoints) troubleshooting documentation.
 
@@ -17,7 +17,7 @@ The [private link Terraform module](https://registry.terraform.io/modules/terraf
 ## Example Usage
 
 ```terraform
-resource "mongodbatlas_privatelink_endpoint" "test" {
+resource "mongodbatlas_privatelink_endpoint" "this" {
   project_id    = "<PROJECT-ID>"
   provider_name = "AWS/AZURE/GCP"
   region        = "US_EAST_1"
@@ -45,6 +45,7 @@ In addition to all arguments above, the following attributes are exported:
 
 * `id` - Terraform's internal unique identifier. Use `private_link_id` instead to reference the private endpoint connection.
 * `private_link_id` - Unique identifier of the private endpoint connection.
+* `region_name` - Region for the Private Service Connect endpoint service.
 * `error_message` - Error message pertaining to the private endpoint connection. Returns null if there are no errors.
 * `status` - Status of the private endpoint connection. See the provider-specific status values below.
 
@@ -72,7 +73,6 @@ In addition to all arguments above, the following attributes are exported:
 ### GCP
 
 * `endpoint_group_names` - For port-mapped architectures, this is a list of private endpoint names associated with the private endpoint service. For GCP legacy private endpoint architectures, this is a list of the endpoint group names associated with the private endpoint service.
-* `region_name` - Region for the Private Service Connect endpoint service.
 * `service_attachment_names` - For port-mapped architecture, this is a list containing one service attachment connected to the private endpoint service. For GCP legacy private endpoint architecture, this is a list of service attachments connected to the private endpoint service (one per Atlas node). Returns an empty list while Atlas creates the service attachments.
 * `status` values:
   * `AVAILABLE` - Atlas created the load balancer and the GCP Private Service Connect service.
@@ -84,9 +84,9 @@ In addition to all arguments above, the following attributes are exported:
 Private Endpoint Service can be imported using project ID, private link ID, provider name and region, in the format `{project_id}-{private_link_id}-{provider_name}-{region}`, e.g.
 
 ```
-$ terraform import mongodbatlas_privatelink_endpoint.test 1112222b3bf99403840e8934-3242342343112-AWS-us-east-1
+$ terraform import mongodbatlas_privatelink_endpoint.this 1112222b3bf99403840e8934-3242342343112-AWS-us-east-1
 ```
 
 For more information, see:
-- [MongoDB API Private Endpoint Service](https://docs.atlas.mongodb.com/reference/api/private-endpoints-service-create-one/) for detailed arguments and attributes.
+- [MongoDB API Private Endpoint Service](https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2/operation/operation-creategroupprivateendpointendpointservice) for detailed arguments and attributes.
 - [Set Up a Private Endpoint](https://www.mongodb.com/docs/atlas/security-private-endpoint/) for general guidance on private endpoints in MongoDB Atlas.
