@@ -24,7 +24,7 @@ resource "mongodbatlas_stream_connection" "test" {
 ```
 
 ### Further Examples
-- [Atlas Stream Connection](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.6.0/examples/mongodbatlas_stream_connection)
+- [Atlas Stream Connection](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.7.0/examples/mongodbatlas_stream_connection)
 
 ### Example Cross Project Cluster Connection
 
@@ -315,12 +315,14 @@ resource "mongodbatlas_stream_connection" "example" {
   timeouts = {
     create = "30m"
     update = "30m"
+    delete = "15m"
   }
 }
 ```
 
 * `create` - (Optional) The maximum time to wait for the stream connection to be fully provisioned after creation. Defaults to `20m` (20 minutes).
 * `update` - (Optional) The maximum time to wait for the stream connection to be fully provisioned after an update. Defaults to `20m` (20 minutes).
+* `delete` - (Optional) The maximum time to wait for the stream connection to be fully deleted. Defaults to `10m` (10 minutes).
 
 ## Import
 
