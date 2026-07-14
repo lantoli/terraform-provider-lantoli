@@ -29,8 +29,8 @@ resource "mongodbatlas_stream_instance" "test" {
 ```
 
 ### Further Examples
-- [Atlas Stream Instance (Deprecated)](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.12.0/examples/mongodbatlas_stream_instance)
-- [Atlas Stream Workspace (Recommended)](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.12.0/examples/mongodbatlas_stream_workspace)
+- [Atlas Stream Instance (Deprecated)](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.13.0/examples/mongodbatlas_stream_instance)
+- [Atlas Stream Workspace (Recommended)](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.13.0/examples/mongodbatlas_stream_workspace)
 
 ## Argument Reference
 
@@ -48,6 +48,7 @@ resource "mongodbatlas_stream_instance" "test" {
 ### Stream Config
 
 * `tier` - (Required) Selected tier for the Stream Instance. Configures Memory / VCPU allowances. The [MongoDB Atlas API](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/#tag/Streams/operation/createStreamInstance) describes the valid values.
+* `max_tier_size` - (Optional, Computed) Maximum tier size for the Stream Instance.
 
 
 ## Attributes Reference
@@ -65,4 +66,4 @@ $ terraform import mongodbatlas_stream_instance.test 650972848269185c55f40ca1-In
 ```
 
 To learn more, see: [MongoDB Atlas API - Stream Instance](https://www.mongodb.com/docs/atlas/reference/api-resources-spec/#tag/Streams/operation/createStreamInstance) Documentation. 
-The [Terraform Provider Examples Section](https://github.com/mongodb/terraform-provider-mongodbatlas/blob/master/examples/mongodbatlas_stream_instance/atlas-streams-user-journey.md) also contains details on the overall support for Atlas Streams Processing in Terraform.
+The [Terraform Provider Examples Section](https://github.com/mongodb/terraform-provider-mongodbatlas/blob/master/examples/mongodbatlas_stream_processor/atlas-streams-user-journey.md) also contains details on the overall support for Atlas Streams Processing in Terraform.

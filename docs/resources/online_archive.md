@@ -103,7 +103,7 @@ resource "mongodbatlas_online_archive" "test" {
 }
 ```
 ### Further Examples
-- [Online Archive Example](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.12.0/examples/mongodbatlas_online_archive)
+- [Online Archive Example](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.13.0/examples/mongodbatlas_online_archive)
 
 ## Argument Reference
 * `project_id` - (Required) The unique ID for the project, also known as `groupId` in the official documentation
@@ -173,4 +173,4 @@ The only field required for criteria type `CUSTOM`
 terraform import mongodbatlas_online_archive.users_archive <project_id>-<cluster_name>-<archive_id>
 ```
 
-See [MongoDB Atlas API](https://docs.atlas.mongodb.com/reference/api/online-archive-create-one/) Documentation for more information.
+See [MongoDB Atlas API](https://www.mongodb.com/docs/atlas/reference/api/online-archive-create-one/) Documentation for more information.

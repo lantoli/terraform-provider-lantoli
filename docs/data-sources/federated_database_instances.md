@@ -38,9 +38,9 @@ In addition to all arguments above, the following attributes are exported:
 * `state` - Current state of the Federated Database Instance:
   * `ACTIVE` - The Federated Database Instance is active and verified. You can query the data stores associated with the Federated Database Instance.
   * `DELETED` - The Federated Database Instance was deleted.
-* `storage_databases` - Configuration details for mapping each data store to queryable databases and collections. For complete documentation on this object and its nested fields, see [databases](https://www.mongodb.com/docs/atlas/data-federation/config/config-oa/#databases). An empty object indicates that the Federated Database Instance has no mapping configuration for any data store.
+* `storage_databases` - Configuration details for mapping each data store to queryable databases and collections. For complete documentation on this object and its nested fields, see [databases](https://www.mongodb.com/docs/atlas/data-federation/config/config-data-stores/). An empty object indicates that the Federated Database Instance has no mapping configuration for any data store.
   * `storage_databases.#.name` - Name of the database to which the Federated Database Instance maps the data contained in the data store.
-  * `storage_databases.#.collections` -     Array of objects where each object represents a collection and data sources that map to a [stores](https://www.mongodb.com/docs/atlas/data-federation/config/config-oa/#stores) data store.
+  * `storage_databases.#.collections` -     Array of objects where each object represents a collection and data sources that map to a [stores](https://www.mongodb.com/docs/atlas/data-federation/config/config-data-stores/) data store.
     * `storage_databases.#.collections.#.name` - Name of the collection.
       * `storage_databases.#.collections.#.data_sources` -     Array of objects where each object represents a stores data store to map with the collection.
         * `storage_databases.#.collections.#.data_sources.#.store_name` -     Name of a data store to map to the `<collection>`. Must match the name of an object in the stores array.
@@ -53,13 +53,13 @@ In addition to all arguments above, the following attributes are exported:
         * `storage_databases.#.collections.#.data_sources.#.collection` - Human-readable label that identifies the collection in the database.
         * `storage_databases.#.collections.#.data_sources.#.collection_regex` - Regex pattern to use for creating the wildcard (*) collection.
         * `storage_databases.#.collections.#.data_sources.#.provenance_field_name` - Name for the field that includes the provenance of the documents in the results.
-        * `storage_databases.#.collections.#.data_sources.#.storeName` - Human-readable label that identifies the data store that MongoDB Cloud maps to the collection.
+        * `storage_databases.#.collections.#.data_sources.#.store_name` - Human-readable label that identifies the data store that MongoDB Cloud maps to the collection.
         * `storage_databases.#.collections.#.data_sources.#.urls` - URLs of the publicly accessible data files. You can't specify URLs that require authentication.
-  * `storage_databases.#.views` -     Array of objects where each object represents an [aggregation pipeline](https://docs.mongodb.com/manual/core/aggregation-pipeline/#id1) on a collection. To learn more about views, see [Views](https://docs.mongodb.com/manual/core/views/).
+  * `storage_databases.#.views` -     Array of objects where each object represents an [aggregation pipeline](https://www.mongodb.com/docs/manual/core/aggregation-pipeline/#id1) on a collection. To learn more about views, see [Views](https://www.mongodb.com/docs/manual/core/views/).
     * `storage_databases.#.views.#.name` - Name of the view.
     * `storage_databases.#.views.#.source` -  Name of the source collection for the view.
     * `storage_databases.#.views.#.pipeline`- Aggregation pipeline stage(s) to apply to the source collection.
-* `storage_stores` - Each object in the array represents a data store. Federated Database uses the `storage.databases` configuration details to map data in each data store to queryable databases and collections. For complete documentation on this object and its nested fields, see [stores](https://www.mongodb.com/docs/atlas/data-federation/config/config-oa/#stores). An empty object indicates that the Federated Database Instance has no configured data stores.
+* `storage_stores` - Each object in the array represents a data store. Federated Database uses the `storage.databases` configuration details to map data in each data store to queryable databases and collections. For complete documentation on this object and its nested fields, see [stores](https://www.mongodb.com/docs/atlas/data-federation/config/config-data-stores/). An empty object indicates that the Federated Database Instance has no configured data stores.
   * `storage_stores.#.name` - Name of the data store.
   * `storage_stores.#.provider` - Defines where the data is stored.
   * `storage_stores.#.region` - Name of the AWS region in which the S3 bucket is hosted.
@@ -73,7 +73,7 @@ In addition to all arguments above, the following attributes are exported:
   * `storage_stores.#.default_format` - Default format that Atlas Data Federation assumes if it encounters a file without an extension while searching the storeName.
   * `storage_stores.#.urls` - Comma-separated list of publicly accessible HTTP URLs where data is stored.
   * `storage_stores.#.read_preference` - MongoDB Cloud cluster read preference, which describes how to route read requests to the cluster.
-    * `storage_stores.#.read_preference.maxStalenessSeconds` - Maximum replication lag, or staleness, for reads from secondaries.
+    * `storage_stores.#.read_preference.max_staleness_seconds` - Maximum replication lag, or staleness, for reads from secondaries.
     * `storage_stores.#.read_preference.mode` - Read preference mode that specifies to which replica set member to route the read requests.
     * `storage_stores.#.read_preference.tag_sets` - List that contains tag sets or tag specification documents.
       * `storage_stores.#.read_preference.tags` - List of all tags within a tag set
@@ -94,7 +94,7 @@ In addition to all arguments above, the following attributes are exported:
 * `role_id` - Unique identifier of the role that Atlas Data Federation can use to access the data stores.
 
 #### `azure` - Azure provider of the cloud service where the Federated Database Instance can access Blob Storage.
-* `atlas_azure_app_id` - Unique identifier of the Azure Active Directory application associated with the service principal.
+* `atlas_app_id` - Unique identifier of the Azure Active Directory application associated with the service principal.
 * `service_principal_id` - Unique identifier of the Azure service principal that the Federated Database instance uses to access Azure Blob Storage.
 * `tenant_id` - Unique identifier of the Azure Active Directory tenant where the service principal resides.
 * `role_id` - Unique identifier of the role that the Federated Database Instance can use to access the data stores.

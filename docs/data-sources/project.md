@@ -71,6 +71,9 @@ In addition to all arguments above, the following attributes are exported:
 * `is_performance_advisor_enabled` - Flag that indicates whether to enable Performance Advisor and Profiler for the project. If enabled, you can analyze database logs to recommend performance improvements.
 * `is_realtime_performance_panel_enabled` - Flag that indicates whether to enable Real Time Performance Panel for the project. If enabled, you can see real time metrics from your MongoDB database.
 * `is_schema_advisor_enabled` - Flag that indicates whether to enable Schema Advisor for the project. If enabled, you receive customized recommendations to optimize your data model and enhance performance. Disable this setting to disable schema suggestions in the [Performance Advisor](https://www.mongodb.com/docs/atlas/performance-advisor/#std-label-performance-advisor) and the [Data Explorer](https://www.mongodb.com/docs/atlas/atlas-ui/#std-label-atlas-ui).
+* `is_cluster_ai_assistant_enabled` - Flag that indicates whether the AI Assistant is enabled for the project's clusters.
+* `is_data_explorer_gen_ai_features_enabled` - Flag that indicates whether generative AI features are enabled in the Data Explorer for the project.
+* `is_data_explorer_gen_ai_sample_document_passing_enabled` - Flag that indicates whether passing sample documents to generative AI features in the Data Explorer is enabled for the project.
 * `region_usage_restrictions` - If GOV_REGIONS_ONLY the project can be used for government regions only, otherwise defaults to standard regions. For more information see [MongoDB Atlas for Government](https://www.mongodb.com/docs/atlas/government/api/#creating-a-project).
 * `is_slow_operation_thresholding_enabled` - (Deprecated) Flag that enables MongoDB Cloud to use its slow operation threshold for the specified project. The threshold determines which operations the Performance Advisor and Query Profiler considers slow. When enabled, MongoDB Cloud uses the average execution time for operations on your cluster to determine slow-running queries. As a result, the threshold is more pertinent to your cluster workload. The slow operation threshold is enabled by default for dedicated clusters (M10+). When disabled, MongoDB Cloud considers any operation that takes longer than 100 milliseconds to be slow. **Note**: To use this attribute, the requesting API Key must have the Project Owner role, if not it will show a warning and will return `false`. If you are not using this field, you don't need to take any action.
 
@@ -98,15 +101,18 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Users
 * `id`- Unique 24-hexadecimal digit string that identifies the MongoDB Cloud user.
-* `orgMembershipStatus`- String enum that indicates whether the MongoDB Cloud user has a pending invitation to join the organization or they are already active in the organization.
+* `org_membership_status`- String enum that indicates whether the MongoDB Cloud user has a pending invitation to join the organization or they are already active in the organization.
 * `roles`- One or more project-level roles assigned to the MongoDB Cloud user.
 * `username`- Email address that represents the username of the MongoDB Cloud user.
 * `country`- Two-character alphabetical string that identifies the MongoDB Cloud user's geographic location. This parameter uses the ISO 3166-1a2 code format.
-* `createdAt`- Date and time when MongoDB Cloud created the current account. This value is in the ISO 8601 timestamp format in UTC.
-* `firstName`- First or given name that belongs to the MongoDB Cloud user.
-* `lastAuth` - Date and time when the current account last authenticated. This value is in the ISO 8601 timestamp format in UTC.
-* `lastName`- Last name, family name, or surname that belongs to the MongoDB Cloud user.
-* `mobileNumber` - Mobile phone number that belongs to the MongoDB Cloud user.
+* `created_at`- Date and time when MongoDB Cloud created the current account. This value is in the ISO 8601 timestamp format in UTC.
+* `first_name`- First or given name that belongs to the MongoDB Cloud user.
+* `last_auth` - Date and time when the current account last authenticated. This value is in the ISO 8601 timestamp format in UTC.
+* `last_name`- Last name, family name, or surname that belongs to the MongoDB Cloud user.
+* `mobile_number` - Mobile phone number that belongs to the MongoDB Cloud user.
+* `invitation_created_at` - Date and time when MongoDB Cloud sent the invitation. MongoDB Cloud represents this timestamp in ISO 8601 format in UTC.
+* `invitation_expires_at` - Date and time when the invitation from MongoDB Cloud expires. MongoDB Cloud represents this timestamp in ISO 8601 format in UTC.
+* `inviter_username` - Username of the MongoDB Cloud user who sent the invitation to join the organization.
 
 ~> **NOTE:** - Does not return pending users invited via the deprecated [Invite One MongoDB Cloud User to Join One Project](https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2/operation/operation-createprojectinvitation) endpoint or pending invitations created using [`mongodbatlas_project_invitation`](../resources/project_invitation.md) resource.
 

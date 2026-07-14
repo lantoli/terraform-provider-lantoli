@@ -4,7 +4,7 @@ subcategory: "Data Federation"
 
 # Resource: mongodbatlas_federated_query_limit
 
-`mongodbatlas_federated_query_limit` provides a Federated Database Instance Query Limits resource. To learn more about Atlas Data Federation see https://www.mongodb.com/docs/atlas/data-federation/overview/.
+`mongodbatlas_federated_query_limit` provides a Federated Database Instance Query Limits resource. To learn more about Atlas Data Federation see https://www.mongodb.com/docs/atlas/data-federation/adf-overview/overview/.
 
 
 ## Example Usages
@@ -21,7 +21,7 @@ resource "mongodbatlas_federated_query_limit" "test" {
 ```
 
 ### Further Examples
-- [Federated Query Limit](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.12.0/examples/mongodbatlas_federated_query_limit)
+- [Federated Query Limit](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.13.0/examples/mongodbatlas_federated_query_limit)
 
 ## Argument Reference
 
@@ -42,9 +42,8 @@ In addition to all arguments above, the following attributes are exported:
 * `id` - The Terraform's unique identifier used internally for state management.
 * `current_usage` - Amount that indicates the current usage of the limit.
 * `default_limit` - Default value of the limit.
-* `lastModifiedDate` - Only used for Data Federation limits. Timestamp that indicates when this usage limit was last modified. This field uses the ISO 8601 timestamp format in UTC.
-* `maximumLimit` - Maximum value of the limit.
-* `name` - Name that identifies the user-managed limit to modify.
+* `last_modified_date` - Only used for Data Federation limits. Timestamp that indicates when this usage limit was last modified. This field uses the ISO 8601 timestamp format in UTC.
+* `maximum_limit` - Maximum value of the limit.
 
 ## Import
 
