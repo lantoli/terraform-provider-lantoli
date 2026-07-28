@@ -173,7 +173,7 @@ The MongoDB Atlas Provider supports multiple operating systems and architectures
 
 ## Troubleshooting
 
-For common issues and networking diagnostics, see the [Troubleshooting Guide](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.13.0/troubleshooting).
+For common issues and networking diagnostics, see the [Troubleshooting Guide](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.14.0/troubleshooting).
 
 ## Helpful Links/Information
 
@@ -190,7 +190,7 @@ For common issues and networking diagnostics, see the [Troubleshooting Guide](ht
 ## Examples from MongoDB and the Community
 
 <!-- NOTE: the below examples link is updated during the release process, when doing changes in the following sentence verify scripts/update-examples-reference-in-docs.sh is not impacted-->
-We have [example configurations](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.13.0/examples)
+We have [example configurations](https://github.com/mongodb/terraform-provider-mongodbatlas/tree/v2.14.0/examples)
 in our GitHub repo that will help both beginner and more advanced users.
 
 Have a good example you've created and want to share?
@@ -198,4 +198,23 @@ Let us know the details via an [issue](https://github.com/mongodb/terraform-prov
 or submit a PR of your work to add it to the `examples` directory in our [GitHub repo](https://github.com/mongodb/terraform-provider-mongodbatlas/).
 
 ## Terraform MongoDB Atlas Modules
-You can now leverage our [Terraform Modules](https://registry.terraform.io/namespaces/terraform-mongodbatlas-modules) to easily get started with MongoDB Atlas and critical features like [Push-based log export](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/push-based-log-export/mongodbatlas/latest), [Private Endpoints](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/private-endpoint/mongodbatlas/latest), etc.
+
+The [Official Terraform MongoDB Atlas modules](https://registry.terraform.io/namespaces/terraform-mongodbatlas-modules) provide reusable building blocks with production recommendations that bundle multiple provider resources into a single module. The individual resource documentation pages above link to the relevant module where applicable.
+
+### Atlas Resources
+
+| Module | Description | Wrapped resources |
+|---|---|---|
+| [Organization](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/organization/mongodbatlas/latest) | Create and manage Atlas organizations with resource policies | [`mongodbatlas_organization`](resources/organization), [`mongodbatlas_resource_policy`](resources/resource_policy) |
+| [Project](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/project/mongodbatlas/latest) | Create and manage projects with IP access lists, maintenance windows, backup compliance policies, and log integrations | [`mongodbatlas_project`](resources/project), [`mongodbatlas_project_ip_access_list`](resources/project_ip_access_list), [`mongodbatlas_maintenance_window`](resources/maintenance_window), [`mongodbatlas_backup_compliance_policy`](resources/backup_compliance_policy), [`mongodbatlas_log_integration`](resources/log_integration) |
+| [Cluster](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/cluster/mongodbatlas/latest) | Provision advanced clusters with backup schedules and production best-practice defaults | [`mongodbatlas_advanced_cluster`](resources/advanced_cluster), [`mongodbatlas_cloud_backup_schedule`](resources/cloud_backup_schedule) |
+
+### Cloud Provider Modules
+
+| Module | Description | Wrapped resources |
+|---|---|---|
+| [AWS](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-aws/mongodbatlas/latest) | AWS integrations: Cloud Provider Access, KMS encryption, PrivateLink, backup export, and log export | [`mongodbatlas_cloud_provider_access_setup`](resources/cloud_provider_access_setup), [`mongodbatlas_cloud_provider_access_authorization`](resources/cloud_provider_access_authorization), [`mongodbatlas_encryption_at_rest`](resources/encryption_at_rest), [`mongodbatlas_encryption_at_rest_private_endpoint`](resources/encryption_at_rest_private_endpoint), [`mongodbatlas_privatelink_endpoint`](resources/privatelink_endpoint), [`mongodbatlas_privatelink_endpoint_service`](resources/privatelink_endpoint_service), [`mongodbatlas_private_endpoint_regional_mode`](resources/private_endpoint_regional_mode), [`mongodbatlas_cloud_backup_snapshot_export_bucket`](resources/cloud_backup_snapshot_export_bucket), [`mongodbatlas_log_integration`](resources/log_integration) |
+| [Azure](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-azure/mongodbatlas/latest) | Azure integrations: Service Principal access, Key Vault encryption, Private Link, backup export, and log export | [`mongodbatlas_cloud_provider_access_setup`](resources/cloud_provider_access_setup), [`mongodbatlas_cloud_provider_access_authorization`](resources/cloud_provider_access_authorization), [`mongodbatlas_encryption_at_rest`](resources/encryption_at_rest), [`mongodbatlas_encryption_at_rest_private_endpoint`](resources/encryption_at_rest_private_endpoint), [`mongodbatlas_privatelink_endpoint`](resources/privatelink_endpoint), [`mongodbatlas_privatelink_endpoint_service`](resources/privatelink_endpoint_service), [`mongodbatlas_private_endpoint_regional_mode`](resources/private_endpoint_regional_mode), [`mongodbatlas_cloud_backup_snapshot_export_bucket`](resources/cloud_backup_snapshot_export_bucket), [`mongodbatlas_log_integration`](resources/log_integration) |
+| [GCP](https://registry.terraform.io/modules/terraform-mongodbatlas-modules/atlas-gcp/mongodbatlas/latest) | GCP integrations: Service Account access, Cloud KMS encryption, Private Service Connect, backup export, and log export | [`mongodbatlas_cloud_provider_access_setup`](resources/cloud_provider_access_setup), [`mongodbatlas_cloud_provider_access_authorization`](resources/cloud_provider_access_authorization), [`mongodbatlas_encryption_at_rest`](resources/encryption_at_rest), [`mongodbatlas_privatelink_endpoint`](resources/privatelink_endpoint), [`mongodbatlas_privatelink_endpoint_service`](resources/privatelink_endpoint_service), [`mongodbatlas_private_endpoint_regional_mode`](resources/private_endpoint_regional_mode), [`mongodbatlas_cloud_backup_snapshot_export_bucket`](resources/cloud_backup_snapshot_export_bucket), [`mongodbatlas_log_integration`](resources/log_integration) |
+
+Use the [Atlas Examples repository](https://github.com/terraform-mongodbatlas-modules/atlas-examples) for end-to-end AWS, Azure, and Google Cloud configurations, or follow [Deploy MongoDB Atlas with Terraform Modules](https://www.mongodb.com/docs/atlas/terraform-modules-landing-zone/) for a guided setup.
